@@ -31,15 +31,18 @@
 	});
 }
 
-function getBoardList(data)	{
-	/*
+function getBoardList(data){
 	while(boardListTable.hasChildNodes()){
 		boardListTable.removeChild(boardListTable.firstChild);
 	}
-	*/
-	const tableBody = boardListTable.querySelector('tbody');
-	let tableStr = ``;
-	
+	let tableStr = `
+	<tr>
+		<th>번호</th>
+		<th>제목</th>
+		<th>작성자</th>
+		<th>조회수</th>
+	</tr>
+	`
 	for(let i = 0; i < data.length; i++){
 		tableStr += `
 		<tr class="board-items">
@@ -51,7 +54,7 @@ function getBoardList(data)	{
 		`;
 	}
 	
-	tableBody.innerHTML = tableStr;
+	boardListTable.innerHTML = tableStr;
 	
 }
 
@@ -65,8 +68,32 @@ for(let i = 0; i < pageButton.length; i++) {
 function getBoardItems() {
 	const boardItems = document.querySelectorAll('.board-items');
 	for(let i = 0; i < boardItems.length; i++) {
-		boardItems[i].onclick = () => {
-			location.href = "/board/dtl/" + boardItems[i].querySelectorAll('td')[0].textContent;
+	boardItems[i].onclick = () => {
+			alert(boardItems[i].querySelectorAll('td')[0].textContent);
 		}
 	}
+
 }
+
+
+/*
+function getData() {
+	return new Promise(function(resolve, reject) {
+		var date = 100;
+		if(data > 100) {
+			resolve(data);
+		}
+		throw reject(new Error("Request is failed" + data));
+	});
+}
+	
+// resolver()의 결과 값 data를 resolvedData로 받음
+getData()
+.then(resolvedData => console.log(resolvedData))
+.catch(error => console.log(error));
+
+new Promise((resolve, reject) => setTimeout((() => resolve(1)), 2000))
+.then(result => {console.log(result); return result + 10;})
+.then(result => {console.log(result); return result + 20;})
+.then(result => console.log(result));
+*/
