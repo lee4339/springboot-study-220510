@@ -2,16 +2,34 @@
  * 
  */
  
- const boardListTable = document.querySelector('.board-list-table');
- const boardListPage = document.querySelector('.board-list-page');
- const pageButton = boardListPage.querySelectorAll('div');
- 
- 
- let nowPage = 1;
- 
- load(nowPage);
- 
- function load(page) {
+const boardListTable = document.querySelector('.board-list-table');
+const boardListPage = document.querySelector('.board-list-page');
+
+
+
+
+let nowPage = 1;
+
+load(nowPage);
+
+function load(page) {
+	let url = `/board/list?page=${page}`;
+	
+	fetch(url)
+	.then(response => {
+		if(response.ok){
+			return response.json();
+		}else{
+			throw new Error("비동기 처리 오류");
+		}
+	})
+	.then(result => {
+		getBoardList(result.data);
+		createPageNumber(result.data[0].boardCountAll);
+		getBoardItems();
+	})
+	.catch(error => {console.log(error);});
+	/*
 	$.ajax({
 		type: "get",
 		url: "/board/list",
@@ -20,15 +38,43 @@
 		},
 		dataType: "text",
 		success: function(data){
-			console.log(data);
 			let boardList = JSON.parse(data);
 			getBoardList(boardList.data);
+			createPageNumber(boardList.data[0].boardCountAll);
 			getBoardItems();
 		},
 		error: function(){
 			alert("비동기 처리 오류");
 		}
-	});
+	});*/
+}
+
+function createPageNumber(data) {
+	const boardListPage = document.querySelector('.board-list-page');
+	const totalBoardCount = data;
+	const totalPageCount = data % 5 == 0 ? data / 5 : (data / 5) + 1;
+	
+	const startIndex = nowPage % 5 == 0 ? nowPage - 4 : nowPage - (nowPage % 5) + 1;
+	const endIndex = startIndex + 4 <= totalPageCount ? startIndex + 4 : totalPageCount;
+	
+	let pageStr = ``;
+	
+	for(let i = startIndex; i <= endIndex; i++){
+		pageStr += `<div>${i}</div>`;
+	}
+	
+	pageStr += `<div>6</div>`;
+	
+	boardListPage.innerHTML = pageStr;
+	
+	const pageButton = boardListPage.querySelectorAll('div');
+	for(let i = 0; i < pageButton.length; i++){
+	pageButton[i].onclick = () => {
+		nowPage = pageButton[i].textContent;
+		load(nowPage);
+	}
+}
+	
 }
 
 function getBoardList(data)	{
@@ -55,16 +101,12 @@ function getBoardList(data)	{
 	
 }
 
-for(let i = 0; i < pageButton.length; i++) {
-	pageButton[i].onclick = () => {
-		nowPage = pageButton[i].textContent;
-		load(nowPage);
-	}
-}
 
-function getBoardItems() {
+
+
+function getBoardItems(){
 	const boardItems = document.querySelectorAll('.board-items');
-	for(let i = 0; i < boardItems.length; i++) {
+	for(let i = 0; i < boardItems.length; i++){
 		boardItems[i].onclick = () => {
 			location.href = "/board/dtl/" + boardItems[i].querySelectorAll('td')[0].textContent;
 		}
