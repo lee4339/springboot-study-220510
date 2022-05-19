@@ -5,7 +5,7 @@ const textareaItem = document.querySelector(".textarea-item");
 /*
 	Promise
 */
-
+/*
 function test(data){
 	return new Promise((resolve, reject) => {
 		if(data > 100){
@@ -15,11 +15,10 @@ function test(data){
 		}
 	});
 }
-
 test(500)
 .then(testData => testData + 100)
 .then(testData2 => alert(testData2))
-.catch(error => {console.log(error)});
+.catch(error => {console.log(error)});*/
 
 
 
@@ -52,7 +51,7 @@ function submit(){
 */
 
 function submit(){
-	let url = "/board";
+	let url = "/api/board";
 	
 	let option = {
 		method: "POST",
@@ -75,8 +74,5 @@ function submit(){
 			throw new Error("정상적인 데이터를 응답받지 못했습니다.");
 		}
 	})
-	.then(data => {/*location.href = "/board/dtl/" + data.data;*/})
-	.catch(error => console.log(error));
+	.then(data => {location.href = "/board-info/" + data.data;})
 }
-
-
