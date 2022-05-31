@@ -6,6 +6,7 @@ import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.CodeSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Component;
 public class LogAdvice {
 		private static final Logger LOGGER = LoggerFactory.getLogger(LogAdvice.class);
 		
-		@Around("within(com.springboot.study..*)")
+		@Pointcut("within(com.springboot.study..*)")
+		private void pointcut() {}
+		
+		@Around("pointcut()")
 		public Object logging(ProceedingJoinPoint pjp) throws Throwable {
 			long startAt = System.currentTimeMillis();
 			

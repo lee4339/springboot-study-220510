@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.study.annotation.Timer;
+import com.springboot.study.annotation.Validation;
 import com.springboot.study.service.board.BoardService;
 import com.springboot.study.web.dto.CMRespDto;
 import com.springboot.study.web.dto.board.BoardInserReqDto;
@@ -38,6 +40,7 @@ public class BoardController {
 		return new ResponseEntity<>(new CMRespDto<List<BoardRespDto>>(1, "게시글 목록 로드", boardRespDtos), HttpStatus.OK);
 	}
 	
+	@Validation
 	@PostMapping("/board")
 	public ResponseEntity<?> createBoard(@Valid @RequestBody BoardInserReqDto boardInserReqDto, BindingResult bindingResult) throws Exception {
 		int boardCode = boardService.creatBoard(boardInserReqDto);
@@ -45,6 +48,7 @@ public class BoardController {
 		
 	}
 	
+	@Timer
 	@GetMapping("/board/{boardCode}")
 	public ResponseEntity<?> getBoard(@PathVariable int boardCode) throws Exception {
 		BoardRespDto boardRespDto = boardService.getBoard(boardCode);
